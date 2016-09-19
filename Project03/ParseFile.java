@@ -50,7 +50,22 @@ public class ParseFile {
 			System.out.println(i.toString());
 		}
 		for (Family f : FamilyList){
-			System.out.println(f.toString());
+			System.out.println("\nFamily Id:"+ f.getId());
+			for(Individual i : individualsList){
+				if(f.getHusband()!= null){
+					if(f.getHusband().equals(i.getId())){
+						System.out.println("Husband Name : " +i.getName());
+					}
+				}
+				if(f.getWife()!=null){
+					if(f.getWife().equals(i.getId())){
+						System.out.println("Wife Name : " +i.getName());
+					}
+				}
+			}
+			System.out.println("Marriage Date : "+f.getMarriageDate());
+			System.out.println("Divorce Date : "+f.getDivorceDate());
+			System.out.println("Child : "+f.getChild());
 		}
 	}
 	
