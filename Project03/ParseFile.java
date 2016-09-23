@@ -8,24 +8,26 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map.Entry;
 
 public class ParseFile {
 	static boolean validLine;
 	
 	static String delimiter = "[ ]";
 	static String[] lineTokens = null;
-	static int icounter = -1;
-	static int fcounter = -1;
+	static String icounter = "";
+	static String fcounter = "";
 	static String IFcache = null; 
 	static String BDcache = null;
 	static String DIMcache = null;
 	
-	static ArrayList<Individual> individualsList = new ArrayList<Individual>();
-	static ArrayList<Family> FamilyList = new ArrayList<Family>();
+	static LinkedHashMap<String, Individual> indiMap = new LinkedHashMap<String, Individual>();
+	static LinkedHashMap<String, Family> famMap = new LinkedHashMap<String, Family>();
 	
 	public static void main(String[] args) {
-		String fileName ="test.ged";
+		String fileName ="/Users/AcquinDmello/Documents/workspace/CS555_Agile/src/Project02_textFile.txt";
 		String line = null;
 		try {
 			FileReader fr = new FileReader(fileName);
@@ -46,26 +48,32 @@ public class ParseFile {
 	
 	//To print Individual and Family Data
 	public static void printData(){
-		for (Individual i:individualsList){
-			System.out.println(i.toString());
+		for (Entry<String, Individual> i :indiMap.entrySet()){
+			System.out.println(i.getValue().toString());
 		}
-		for (Family f : FamilyList){
-			System.out.println("\nFamily Id:"+ f.getId());
-			for(Individual i : individualsList){
-				if(f.getHusband()!= null){
-					if(f.getHusband().equals(i.getId())){
-						System.out.println("Husband Name : " +i.getName());
-					}
-				}
-				if(f.getWife()!=null){
-					if(f.getWife().equals(i.getId())){
-						System.out.println("Wife Name : " +i.getName());
-					}
+		for (Entry<String, Family> f :famMap.entrySet()){
+			Family fam = f.getValue();
+			
+			System.out.println("\nFamily id : "+fam.getId());
+			if(fam.getHusband() != null){
+				if(indiMap.containsKey(fam.getHusband())){
+					Individual husb = indiMap.get(fam.getHusband());
+					System.out.println("Husband Name : "+husb.getName());
 				}
 			}
-			System.out.println("Marriage Date : "+f.getMarriageDate());
-			System.out.println("Divorce Date : "+f.getDivorceDate());
-			System.out.println("Child : "+f.getChild());
+			if(fam.getWife() != null){
+				if(indiMap.containsKey(fam.getWife())){
+					Individual wife = indiMap.get(fam.getWife());
+					System.out.println("Wife Name : "+wife.getName());
+				}
+			}
+			System.out.println(fam.getMarriageDate());
+			if(fam.getDivorceDate() != null){
+				System.out.println("Divorce Date : "+fam.getDivorceDate());
+			}
+			if(fam.getChild() != null){
+				System.out.println("Child : "+fam.getChild());
+			}
 		}
 	}
 	
@@ -79,16 +87,16 @@ public class ParseFile {
 					switch(lineTokens[2]){
 						case "INDI":
 							i = new Individual();
-							icounter ++;
+							icounter = lineTokens[1];
 							i.setId(lineTokens[1]);
-							individualsList.add(i);
+							indiMap.put(lineTokens[1], i);
 							IFcache = "I";
 							break;
 						case "FAM":
 							f = new Family();
-							fcounter++;
+							fcounter = lineTokens[1];
 							f.setId(lineTokens[1]);
-							FamilyList.add(f);
+							famMap.put(lineTokens[1], f);
 							IFcache ="F";
 							break;
 						default:break;
@@ -98,7 +106,7 @@ public class ParseFile {
 				break;
 			case "1":
 				switch(IFcache){
-					case "I":i = individualsList.get(icounter);
+					case "I":i = indiMap.get(icounter);
 							switch(lineTokens[1]){
 								case "NAME":i.setName(lineTokens[2]+" "+lineTokens[3].replaceAll("/",""));break;
 								case "SEX":i.setGender(lineTokens[2]);break;
@@ -111,7 +119,7 @@ public class ParseFile {
 							}
 						break;
 						
-					case "F":f = FamilyList.get(fcounter);
+					case "F":f = famMap.get(fcounter);
 							switch(lineTokens[1]){
 								case "HUSB":f.setHusband(lineTokens[2]);break;
 								case "WIFE":f.setWife(lineTokens[2]);break;
@@ -126,7 +134,7 @@ public class ParseFile {
 				break;
 			case "2":
 				switch(IFcache){
-					case "I":i = individualsList.get(icounter);
+					case "I":i = indiMap.get(icounter);
 						switch(BDcache){
 							case "B":i.setBirthDate(getDate(lineTokens[2]+lineTokens[3]+lineTokens[4]));break;
 							case "D":i.setDeathDate(getDate(lineTokens[2]+lineTokens[3]+lineTokens[4]));break;
@@ -134,7 +142,7 @@ public class ParseFile {
 						}
 						break;
 					
-					case "F": f = FamilyList.get(fcounter);
+					case "F": f = famMap.get(fcounter);
 						switch(DIMcache){
 							case "M":f.setMarriageDate(getDate(lineTokens[2]+lineTokens[3]+lineTokens[4]));break;
 							case "DI":f.setDivorceDate(getDate(lineTokens[2]+lineTokens[3]+lineTokens[4]));break;
