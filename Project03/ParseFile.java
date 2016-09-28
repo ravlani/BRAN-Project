@@ -39,6 +39,7 @@ public class ParseFile {
 			}
 			br.close();
 			printData();
+            		printErrorsAnomalies();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -169,6 +170,12 @@ public class ParseFile {
 		}
 		return dt;
 	}
+
+    	private static void printErrorsAnomalies(){
+            ErrorAnomalyChecker errorAnomalyChecker = new ErrorAnomalyChecker(indiMap, famMap);
+            errorAnomalyChecker.checkUS07();
+            errorAnomalyChecker.checkUS08();
+        }
 	
 
 
