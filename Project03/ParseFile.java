@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -39,7 +38,7 @@ public class ParseFile {
 			}
 			br.close();
 			printData();
-            		printErrorsAnomalies();
+            printErrorsAnomalies();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -175,6 +174,8 @@ public class ParseFile {
             ErrorAnomalyChecker errorAnomalyChecker = new ErrorAnomalyChecker(indiMap, famMap);
             errorAnomalyChecker.checkUS07();
             errorAnomalyChecker.checkUS08();
+            AErrorChecker aErrorCheck = new AErrorChecker(indiMap, famMap);
+            aErrorCheck.runLoop();
         }
 	
 
