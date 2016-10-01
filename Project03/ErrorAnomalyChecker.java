@@ -22,21 +22,11 @@ public class ErrorAnomalyChecker {
     }
 
     public void checkUS07(){
-        try {
-            for(Entry<String, Individual> indiMap: this.individualMap.entrySet()){
-                Individual indi = indiMap.getValue();
-                Calendar calBirth = Calendar.getInstance();
-                calBirth.setTime(indi.birthDate);
-                LocalDate localBirthDate = LocalDate.of(calBirth.get(Calendar.YEAR), calBirth.get(Calendar.MONTH)+1, calBirth.get(Calendar.DAY_OF_MONTH));
-                LocalDate yearsAgo150 = LocalDate.now().minusYears(150);
-                Period age = Period.between(yearsAgo150, localBirthDate);
-                if(age.isNegative())
-                    System.out.println("Anomaly US07: " + indi.name + "(" + indi.id + ")" + "'s age exceeds 150 years.");
-            }
-        }
-        catch (Exception e) {
-            System.out.println("checkUS07 failed");
-        }
+        for(Entry<String, Individual> indiMap: this.individualMap.entrySet()){
+    		Individual indi = indiMap.getValue();
+    		if(!indi.isUnder150YearsOld())
+    			System.out.println("Anomaly US07: " + indi.name + "(" + indi.id + ")" + "'s age exceeds 150 years.");
+    	}
     }
 
     private List<LocalDate> findParentMarriageAndDivorceDate(Individual indi){
