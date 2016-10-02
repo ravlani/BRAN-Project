@@ -176,8 +176,8 @@ public class ParseFile {
             errorAnomalyChecker.checkUS08();
             AErrorChecker aErrorCheck = new AErrorChecker(indiMap, famMap);
             aErrorCheck.runLoop();
-            AEChecker56 ae = new AEChecker56(indiMap,famMap);
-            ae.mar_div_BeforeDeath();
+            NErrorChecker nErrorCheck = new NErrorChecker(indiMap,famMap);
+            nErrorCheck.mar_div_BeforeDeath();
         }
 	
 

@@ -10,13 +10,13 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 
-public class AEChecker56 {
+public class NErrorChecker {
 	
 	private LinkedHashMap<String, Individual> iMap;
 	private LinkedHashMap<String, Family> fMap;
 
 
-	public AEChecker56(LinkedHashMap<String, Individual> iMap, LinkedHashMap<String, Family> fMap) {
+	public NErrorChecker(LinkedHashMap<String, Individual> iMap, LinkedHashMap<String, Family> fMap) {
 		super();
 		this.iMap = iMap;
 		this.fMap = fMap;
@@ -35,20 +35,20 @@ public class AEChecker56 {
 			
 			if(hus_dd != null){
 				if(hus_dd.before(f.getMarriageDate()))
-					System.out.println("Anomaly US05 : Husband's ("+husband+" - "+f.getHusband()+") death before marriage");
+					System.out.println("Anomaly US05 : "+husband+"("+f.getHusband()+")'s death is  before marriage");
 				
 				if(f.getDivorceDate() != null){
 					if(hus_dd.before(f.getDivorceDate()))
-					System.out.println("Anomaly US06 : Husband's ("+husband+" - "+f.getHusband()+") death before divorce");
+					System.out.println("Anomaly US06 : "+husband+"("+f.getHusband()+")'s death is  before divorce");
 				}
 				
 			}
 			if(wife_dd != null){
 				if(wife_dd.before(f.getMarriageDate()))
-					System.out.println("Anomaly US05 : Wife's ("+wife+" - "+f.getWife()+") death before marriage");
+					System.out.println("Anomaly US05 : "+wife+"("+f.getWife()+")'s death is  before marriage");
 				if(f.getDivorceDate() != null){
 					if(wife_dd.before(f.getDivorceDate()))
-						System.out.println("Anomaly US06 : Wife's ("+wife+" - "+f.getWife()+") death before divorce");
+						System.out.println("Anomaly US06 : "+wife+"("+f.getWife()+")'s death is  before divorce");
 				
 				}
 			}	
