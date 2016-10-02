@@ -1,5 +1,8 @@
 package Project03;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Individual {
