@@ -1,4 +1,4 @@
-package Project03;
+package Project03_LHM;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -26,7 +26,7 @@ public class ParseFile {
 	static LinkedHashMap<String, Family> famMap = new LinkedHashMap<String, Family>();
 	
 	public static void main(String[] args) {
-		String fileName ="/Users/AcquinDmello/Documents/workspace/CS555_Agile/src/Project02_textFile.txt";
+		String fileName ="test.ged";
 		String line = null;
 		try {
 			FileReader fr = new FileReader(fileName);
@@ -67,7 +67,7 @@ public class ParseFile {
 					System.out.println("Wife Name : "+wife.getName());
 				}
 			}
-			System.out.println(fam.getMarriageDate());
+			System.out.println("Marriage Date : "+fam.getMarriageDate());
 			if(fam.getDivorceDate() != null){
 				System.out.println("Divorce Date : "+fam.getDivorceDate());
 			}
@@ -176,6 +176,8 @@ public class ParseFile {
             errorAnomalyChecker.checkUS08();
             AErrorChecker aErrorCheck = new AErrorChecker(indiMap, famMap);
             aErrorCheck.runLoop();
+            AEChecker56 ae = new AEChecker56(indiMap,famMap);
+            ae.mar_div_BeforeDeath();
         }
 	
 
