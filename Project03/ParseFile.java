@@ -178,7 +178,7 @@ public class ParseFile {
             aErrorCheck.runLoop();
             NErrorChecker nErrorCheck = new NErrorChecker(indiMap,famMap);
             nErrorCheck.mar_div_BeforeDeath();
-	    Check check = new Check(indiMap, famMap);
+            RErrorChecker check = new RErrorChecker(indiMap, famMap);
             check.user_stories();
         }
 	
