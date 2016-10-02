@@ -26,7 +26,7 @@ public class ParseFile {
 	static LinkedHashMap<String, Family> famMap = new LinkedHashMap<String, Family>();
 	
 	public static void main(String[] args) {
-		String fileName ="test.ged";
+		String fileName ="/Users/AcquinDmello/Documents/Agile Project/BRAN-Project/test.ged";
 		String line = null;
 		try {
 			FileReader fr = new FileReader(fileName);
