@@ -1,5 +1,7 @@
 package Project03;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
@@ -19,7 +21,7 @@ class AErrorChecker {
 			//For User story 03
 			if(set.getValue().getDeathDate() != null){
 				if(!us03(set.getValue().getDeathDate(), set.getValue().getBirthDate())){
-					System.out.println("Anamoly US03 : "+set.getValue().getName()+"("+set.getValue().getId()+")'s Death Date is before Birth Date." );
+					System.out.println("Error: US03 : "+set.getValue().getName()+"("+set.getValue().getId()+")'s Death Date "+formatDate(set.getValue().getDeathDate())+" is before Birth Date "+formatDate(set.getValue().getBirthDate())+"." );
 				}
 			}
 			
@@ -32,7 +34,7 @@ class AErrorChecker {
 				if(!us04(set.getValue().getDivorceDate(), set.getValue().getMarriageDate())){
 					String husband = indiMap.get(set.getValue().getHusband()).getName();
 					String wife = indiMap.get(set.getValue().getWife()).getName();
-					System.out.println("Anamoly US04 : "+husband+"("+set.getValue().getHusband()+")'s and "+wife+"("+set.getValue().getWife()+")'s divorce is before their marriage." );
+					System.out.println("Error: US04 : "+husband+"("+set.getValue().getHusband()+")'s and "+wife+"("+set.getValue().getWife()+")'s divorce date "+formatDate(set.getValue().getDivorceDate())+" is before their marriage date "+formatDate(set.getValue().getMarriageDate())+" in Family ("+set.getValue().getId()+")." );
 				}
 			}
 			
@@ -51,6 +53,13 @@ class AErrorChecker {
 			return false;
 		}
 		return true;
+	}
+	
+	public String formatDate(Date date){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+		return format1.format(cal.getTime());
 	}
 	
 }
