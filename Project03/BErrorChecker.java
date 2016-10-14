@@ -13,6 +13,7 @@ public class BErrorChecker {
     private LinkedHashMap<String, Individual> individualMap;
     private LinkedHashMap<String, Family> familyMap;
 
+
     public BErrorChecker(LinkedHashMap<String, Individual> individualMap, LinkedHashMap<String, Family> familyMap){
         this.individualMap = individualMap;
         this.familyMap = familyMap;

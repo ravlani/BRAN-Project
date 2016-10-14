@@ -177,6 +177,7 @@ public class ParseFile {
 		return dt;
 	}
 
+
     private static void printErrorsAnomalies(){
         BErrorChecker benChecker = new BErrorChecker(indiMap, famMap);
         benChecker.check();
@@ -198,6 +199,7 @@ public class ParseFile {
     		US22ErrorMsg = US22ErrorMsg.concat(String.format("Error US22: This unique id(%1s) already exist", id));
     	}
     }
+
 	
 
 
