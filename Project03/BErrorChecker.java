@@ -8,17 +8,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class ErrorAnomalyChecker {
+public class BErrorChecker {
 
     private LinkedHashMap<String, Individual> individualMap;
     private LinkedHashMap<String, Family> familyMap;
 
-    private List<String> userStories;
-
-    public ErrorAnomalyChecker(LinkedHashMap<String, Individual> individualMap, LinkedHashMap<String, Family> familyMap){
+    public BErrorChecker(LinkedHashMap<String, Individual> individualMap, LinkedHashMap<String, Family> familyMap){
         this.individualMap = individualMap;
         this.familyMap = familyMap;
-
+    }
+    
+    public void check(){
+    	checkUS07();
+    	checkUS08();
+    	checkUS10();
     }
 
     public void checkUS07(){
@@ -73,6 +76,32 @@ public class ErrorAnomalyChecker {
                 System.out.println("Anomaly US08: " + indi.name + "(" + indi.id + ")" + "'s birth after parents' divorce.");
             }
         }
+    }
+    
+    public void checkUS10(){
+    	String husbandId;
+    	String wifeId;
+    	Individual husband;
+    	Individual wife;
+    	for(Entry<String, Family> famEntry: this.familyMap.entrySet()){
+    		husbandId = famEntry.getValue().husband;
+    		wifeId = famEntry.getValue().wife;
+    		husband = individualMap.get(husbandId);
+    		wife = individualMap.get(wifeId);
+    		Calendar calHusband = Calendar.getInstance();
+    		calHusband.setTime(husband.birthDate);
+    		Calendar calWife = Calendar.getInstance();
+    		calWife.setTime(wife.birthDate);
+    		LocalDate husbandBirthLocalDate = LocalDate.of(calHusband.get(Calendar.YEAR), calHusband.get(Calendar.MONTH)+1, calHusband.get(Calendar.DATE));
+    		LocalDate wifeBirthLocalDate = LocalDate.of(calWife.get(Calendar.YEAR), calWife.get(Calendar.MONTH)+1, calWife.get(Calendar.DATE));
+
+    		boolean isHusbandUnder14 = Period.between(husbandBirthLocalDate, LocalDate.now().minusYears(14)).isNegative();
+    		boolean isWifeUnder14 = Period.between(wifeBirthLocalDate, LocalDate.now().minusYears(14)).isNegative();
+    		
+    		if(isHusbandUnder14 || isWifeUnder14){
+    			System.out.printf("Error US10: One(or two) of the spouses from this family(%1s) are under 14 years old.\n", famEntry.getKey() );
+    		}
+    	}
     }
 
 }

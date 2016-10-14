@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
 
+import com.sun.glass.ui.TouchInputSupport;
+
 public class ParseFile {
 	static boolean validLine;
 	
@@ -24,6 +26,8 @@ public class ParseFile {
 	
 	static LinkedHashMap<String, Individual> indiMap = new LinkedHashMap<String, Individual>();
 	static LinkedHashMap<String, Family> famMap = new LinkedHashMap<String, Family>();
+	
+	private static String US22ErrorMsg = "";
 	
 	public static void main(String[] args) {
 		String fileName ="/Users/AcquinDmello/Documents/Agile Project/BRAN-Project/test.ged";
@@ -84,6 +88,9 @@ public class ParseFile {
 		switch(lineTokens[0]){
 			case "0":
 				if(lineTokens.length>2){
+
+					checkIfIdExist(lineTokens[1]);
+					
 					switch(lineTokens[2]){
 						case "INDI":
 							i = new Individual();
@@ -170,17 +177,27 @@ public class ParseFile {
 		return dt;
 	}
 
-    	private static void printErrorsAnomalies(){
-            ErrorAnomalyChecker errorAnomalyChecker = new ErrorAnomalyChecker(indiMap, famMap);
-            errorAnomalyChecker.checkUS07();
-            errorAnomalyChecker.checkUS08();
-            AErrorChecker aErrorCheck = new AErrorChecker(indiMap, famMap);
-            aErrorCheck.runLoop();
-            NErrorChecker nErrorCheck = new NErrorChecker(indiMap,famMap);
-            nErrorCheck.mar_div_BeforeDeath();
-            RErrorChecker check = new RErrorChecker(indiMap, famMap);
-            check.user_stories();
-        }
+    private static void printErrorsAnomalies(){
+        BErrorChecker benChecker = new BErrorChecker(indiMap, famMap);
+        benChecker.check();
+        System.out.println(US22ErrorMsg);
+        AErrorChecker aErrorCheck = new AErrorChecker(indiMap, famMap);
+        aErrorCheck.runLoop();
+        NErrorChecker nErrorCheck = new NErrorChecker(indiMap,famMap);
+        nErrorCheck.mar_div_BeforeDeath();
+        RErrorChecker check = new RErrorChecker(indiMap, famMap);
+        check.user_stories();
+    }
+    	
+    private static void checkIfIdExist(String id){
+    	boolean isIndividualExist = indiMap.containsKey(id);
+    	boolean isFamilyExist = famMap.containsKey(id);
+
+    	if(isIndividualExist || isFamilyExist){
+    		//System.out.printf("Error US22: This unique id(%1s) has exist\n", id);
+    		US22ErrorMsg = US22ErrorMsg.concat(String.format("Error US22: This unique id(%1s) already exist", id));
+    	}
+    }
 	
 
 
