@@ -1,4 +1,4 @@
-package Project03_LHM;
+package Project03;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -26,7 +26,7 @@ public class ParseFile {
 	static LinkedHashMap<String, Family> famMap = new LinkedHashMap<String, Family>();
 	
 	public static void main(String[] args) {
-		String fileName ="test.ged";
+		String fileName ="/Users/AcquinDmello/Documents/Agile Project/BRAN-Project/test.ged";
 		String line = null;
 		try {
 			FileReader fr = new FileReader(fileName);
@@ -178,6 +178,8 @@ public class ParseFile {
             aErrorCheck.runLoop();
             NErrorChecker nErrorCheck = new NErrorChecker(indiMap,famMap);
             nErrorCheck.mar_div_BeforeDeath();
+            RErrorChecker check = new RErrorChecker(indiMap, famMap);
+            check.user_stories();
         }
 	
 

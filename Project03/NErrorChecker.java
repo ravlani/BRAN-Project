@@ -1,4 +1,4 @@
-package Project03_LHM;
+package Project03;
 
 /*
  User Story  5 - Marriage before death
