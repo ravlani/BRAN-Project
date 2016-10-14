@@ -8,14 +8,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-public class ErrorAnomalyChecker {
+public class BErrorChecker {
 
     private LinkedHashMap<String, Individual> individualMap;
     private LinkedHashMap<String, Family> familyMap;
 
     private List<String> userStories;
 
-    public ErrorAnomalyChecker(LinkedHashMap<String, Individual> individualMap, LinkedHashMap<String, Family> familyMap){
+    public BErrorChecker(LinkedHashMap<String, Individual> individualMap, LinkedHashMap<String, Family> familyMap){
         this.individualMap = individualMap;
         this.familyMap = familyMap;
 
