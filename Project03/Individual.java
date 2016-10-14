@@ -1,5 +1,8 @@
 package Project03;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Individual {
@@ -63,6 +66,19 @@ public class Individual {
 				+ "\n Death Date : " + deathDate + ""
 				+ "\n Family Spouse Id : " + FspouseId + ""
 				+ "\n Family Child Id : " + FchildId + "\n";
+	}
+	
+	public boolean isUnder150YearsOld(){
+	    if(this.birthDate == null)
+	        return false;
+	    Calendar calBirth = Calendar.getInstance();
+	    calBirth.setTime(this.birthDate);
+            LocalDate localBirthDate = LocalDate.of(calBirth.get(Calendar.YEAR), calBirth.get(Calendar.MONTH)+1, calBirth.get(Calendar.DAY_OF_MONTH));
+            LocalDate yearsAgo150 = LocalDate.now().minusYears(150);
+            Period age = Period.between(yearsAgo150, localBirthDate);
+            if(age.isNegative())
+        	return false;
+            return true;
 	}
 	
 }
