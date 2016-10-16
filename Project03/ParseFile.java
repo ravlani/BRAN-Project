@@ -30,7 +30,7 @@ public class ParseFile {
 	private static String US22ErrorMsg = "";
 	
 	public static void main(String[] args) {
-		String fileName ="/Users/AcquinDmello/Documents/Agile Project/BRAN-Project/test.ged";
+		String fileName ="test.ged";
 		String line = null;
 		try {
 			FileReader fr = new FileReader(fileName);
@@ -177,16 +177,19 @@ public class ParseFile {
 		return dt;
 	}
 
+
     private static void printErrorsAnomalies(){
-        BErrorChecker benChecker = new BErrorChecker(indiMap, famMap);
-        benChecker.check();
-        System.out.println(US22ErrorMsg);
-        AErrorChecker aErrorCheck = new AErrorChecker(indiMap, famMap);
-        aErrorCheck.runLoop();
-        NErrorChecker nErrorCheck = new NErrorChecker(indiMap,famMap);
-        nErrorCheck.mar_div_BeforeDeath();
-        RErrorChecker check = new RErrorChecker(indiMap, famMap);
-        check.user_stories();
+       BErrorChecker errorAnomalyChecker = new BErrorChecker(indiMap, famMap);
+            errorAnomalyChecker.checkUS07();
+            errorAnomalyChecker.checkUS08();
+            AErrorChecker aErrorCheck = new AErrorChecker(indiMap, famMap);
+            aErrorCheck.runLoop();
+            NErrorChecker nErrorCheck = new NErrorChecker(indiMap,famMap);
+            nErrorCheck.mar_div_BeforeDeath();
+            nErrorCheck.parentsNotOld();
+            nErrorCheck.uniqueNameBirthDate();
+            RErrorChecker check = new RErrorChecker(indiMap, famMap);
+            check.user_stories();
     }
     	
     private static void checkIfIdExist(String id){
@@ -198,7 +201,6 @@ public class ParseFile {
     		US22ErrorMsg = US22ErrorMsg.concat(String.format("Error US22: This unique id(%1s) already exist", id));
     	}
     }
-	
 
 
 }
