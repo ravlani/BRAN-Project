@@ -6,10 +6,16 @@
 2 DATE 25 APR 1700
 1 FAMS @F1@
 0 @I2@ INDI
-1 NAME Sarah /Wade/
+1 NAME Duplicate /Wade/
 1 SEX F
 1 BIRT
 2 DATE 20 APR 1960
+1 FAMS @F1@
+0 @I2@ INDI
+1 NAME Sarah /Wade/
+1 SEX F
+1 BIRT
+2 DATE 20 APR 2010
 1 FAMS @F1@
 0 @I3@ INDI
 1 NAME George /Brown/
