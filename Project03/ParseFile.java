@@ -180,7 +180,7 @@ public class ParseFile {
 
     private static void printErrorsAnomalies(){
 		BErrorChecker bErrorChecker = new BErrorChecker(indiMap, famMap);
-		bErrorChecker.check;
+		bErrorChecker.check();
 		System.out.print(US22ErrorMsg);
 		AErrorChecker aErrorCheck = new AErrorChecker(indiMap, famMap);
 		aErrorCheck.runLoop();
