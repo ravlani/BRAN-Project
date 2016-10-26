@@ -100,7 +100,25 @@ public class RErrorChecker {
 				}
 			}
 		}
+		for(Entry<String, Individual> individual1 : individual_Map.entrySet()){
+			if(individual1.getValue().getDeathDate()!=null){
+				System.out.println("Anomaly US29: Individual: " + individual1.getValue().getId() + " " +individual1.getValue().getName() + "is deceased on: " + individual1.getValue().getDeathDate());
+			}
+		}
+		for(Entry<String, Family> family : family_Map.entrySet()){
+			Family family1 = family.getValue();
+			String hus = individual_Map.get(family1.getHusband()).getName();
+			String wife = individual_Map.get(family1.getWife()).getName();
+			Date death_hus = individual_Map.get(family1.getHusband()).getDeathDate();
+			Date death_wife = individual_Map.get(family1.getWife()).getDeathDate();
+			if(death_wife != null){
+				System.out.println("Anomaly US30: Individual: " + family1.getWife() +" "+ wife + " is married");
+			}
+			if(death_hus != null){
+				System.out.println("Anomaly US30: Individual: " + family1.getHusband() +" "+ hus + " is married");
+			}
+			
+		}
 	}
 	
 }
-	
