@@ -178,7 +178,6 @@ public class ParseFile {
 	}
 
 
-
     private static void printErrorsAnomalies(){
 		BErrorChecker bErrorChecker = new BErrorChecker(indiMap, famMap);
 		bErrorChecker.check();
