@@ -1,11 +1,13 @@
 package Project03;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
 
@@ -13,6 +15,7 @@ class AErrorChecker {
 	private LinkedHashMap<String, Individual> indiMap;
 	private LinkedHashMap<String, Family> famMap;
 	private HashMap<String, Family> indiMarraige = new HashMap<String, Family>();
+	private HashMap<String, Date> us32MultiBirth = new HashMap<String, Date>();
 	
 	public AErrorChecker(LinkedHashMap<String, Individual> indiMap, LinkedHashMap<String, Family> famMap){
 		this.indiMap = indiMap;
@@ -28,6 +31,7 @@ class AErrorChecker {
 					System.out.println("Error: US03 : "+set.getValue().getName()+"("+set.getValue().getId()+")'s Death Date "+formatDate(set.getValue().getDeathDate())+" is before Birth Date "+formatDate(set.getValue().getBirthDate())+"." );
 				}
 			}
+			
 			
 		}
 		
@@ -55,6 +59,12 @@ class AErrorChecker {
 				String wife= indiMap.get(set.getValue().getWife()).getName();
 				System.out.println("Error: US21 : "+wife+"("+set.getValue().getWife()+")'s gender for her role shoudld be (F) instead of (M)" );
 			}
+			
+			//For User Story 32
+			us32(set.getValue());
+			//For User Story 33
+			us33(set.getValue());
+			
 		}
 	}
 	
@@ -115,6 +125,37 @@ class AErrorChecker {
 		}
 	}//End User Story 11
 	
+	public void us32(Family fam){
+		ArrayList<String> children = new ArrayList<String>();
+		children = fam.getChild();
+		if(children.size()>1){
+			for(int i=0;i<children.size();i++){
+				for(int j=i+1;j<children.size();j++){
+					Individual child1 = indiMap.get(children.get(i));
+					Individual child2 = indiMap.get(children.get(j));
+					if(child1.getBirthDate().equals(child2.getBirthDate())){
+						System.out.println("Anamoly: US32: Family ("+fam.getId()+") has multiple births with child ("+child1.getId()+") and child ("+child2.getId()+")");
+					}
+				}
+			}
+		}
+	}
+	
+	public void us33(Family fam){
+		ArrayList<String> children = new ArrayList<String>();
+		children = fam.getChild();
+		for(int i=0;i<children.size();i++){
+			Individual husIndi = indiMap.get(fam.getHusband());
+			Individual wifeIndi = indiMap.get(fam.getWife());
+			Individual childIndi = indiMap.get(children.get(i));
+			if(husIndi.getDeathDate() != null && wifeIndi.getDeathDate() != null){
+				if(getDiffYears(childIndi.getBirthDate(), new Date()) < 18){
+					System.out.println("Anamoly: US33: Child ("+children.get(i)+") in family ("+fam.getId()+") is orphan.");
+				}
+			}
+		}
+	}
+	
 	public boolean us21(String ID, String role){
 		return indiMap.get(ID).getGender().equals(role);
 	}
@@ -123,6 +164,25 @@ class AErrorChecker {
 		cal.setTime(date);
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 		return format1.format(cal.getTime());
+	}
+	
+	//Utils
+	
+	public static int getDiffYears(Date first, Date last) {
+	    Calendar a = getCalendar(first);
+	    Calendar b = getCalendar(last);
+	    int diff = b.get(Calendar.YEAR) - a.get(Calendar.YEAR);
+	    if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH) || 
+	        (a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) > b.get(Calendar.DATE))) {
+	        diff--;
+	    }
+	    return diff;
+	}
+
+	public static Calendar getCalendar(Date date) {
+	    Calendar cal = Calendar.getInstance(Locale.US);
+	    cal.setTime(date);
+	    return cal;
 	}
 	
 }
