@@ -1,12 +1,16 @@
 package Project03;
 
+import java.security.interfaces.RSAMultiPrimePrivateCrtKey;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.PriorityQueue;
 
 public class BErrorChecker {
 
@@ -23,9 +27,11 @@ public class BErrorChecker {
     	checkUS07();
     	checkUS08();
     	checkUS10();
+    	checkUS28();
+    	checkUS31();
     }
 
-    public void checkUS07(){
+    private void checkUS07(){
         for(Entry<String, Individual> indiMap: this.individualMap.entrySet()){
     		Individual indi = indiMap.getValue();
     		if(!indi.isUnder150YearsOld())
@@ -53,7 +59,7 @@ public class BErrorChecker {
         return Arrays.asList(null, null);
     }
 
-    public void checkUS08(){
+    private void checkUS08(){
         for(Entry<String, Individual> indiEntry: individualMap.entrySet()){
             Individual indi = indiEntry.getValue();
             Calendar cal = Calendar.getInstance();
@@ -79,7 +85,7 @@ public class BErrorChecker {
         }
     }
     
-    public void checkUS10(){
+    private void checkUS10(){
     	String husbandId;
     	String wifeId;
     	Individual husband;
@@ -105,4 +111,54 @@ public class BErrorChecker {
     	}
     }
 
+    private void checkUS28(){
+    	for(Entry<String, Family> famEntry: this.familyMap.entrySet()){
+    		Family family = famEntry.getValue();
+    		PriorityQueue<Individual> priorityQueue = new PriorityQueue<>(new IndividualAgeComparator());
+    		if(family.child.size()<2)
+    			continue;
+    		StringBuilder sb = new StringBuilder(String.format("US28: Family %1s has children:", family.id));
+    		for(String id: family.child){
+    			Individual child = this.individualMap.get(id);
+    			priorityQueue.add(child);
+    		}
+    		
+    		while(priorityQueue.peek() != null){
+    			Individual indi = priorityQueue.poll();
+    			Calendar cal = Calendar.getInstance();
+        		cal.setTime(indi.birthDate);
+        		LocalDate birthDate = LocalDate.of(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DATE));
+        		Integer age = Period.between(birthDate, LocalDate.now()).getYears();
+    			sb.append(String.format(" %1$s(%2$s) age %3$s,", indi.name, indi.id, age.toString()));
+    		}
+    		sb.deleteCharAt(sb.length()-1);
+    		System.out.println(sb);
+    	}
+    }
+    
+    private void checkUS31(){
+    	for(Entry<String, Individual> indiEntry: this.individualMap.entrySet()){
+    		Individual indi = indiEntry.getValue();
+    		Calendar cal = Calendar.getInstance();
+    		cal.setTime(indi.birthDate);
+    		LocalDate birthDate = LocalDate.of(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH)+1, cal.get(Calendar.DATE));
+    		int age = Period.between(birthDate, LocalDate.now()).getYears();
+    		if(indi.FspouseId == null && age >= 30){
+    			System.out.printf(String.format("US31: %1s(%2s) is over 30 and single.\n", indi.name, indi.id));
+    		}
+    	}
+    }
+}
+
+class IndividualAgeComparator implements Comparator<Individual>{
+	@Override
+	public int compare(Individual i1, Individual i2){
+		if(i1.birthDate.after(i2.birthDate)){
+			return 1;
+		}
+		if(i1.birthDate.before(i2.birthDate)){
+			return -1;
+		}
+		return 0;
+	}
 }
