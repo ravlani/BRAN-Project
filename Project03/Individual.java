@@ -65,7 +65,7 @@ public class Individual {
 				+ "\n Birth Date : " + birthDate
 				+ "\n Death Date : " + deathDate + ""
 				+ "\n Family Spouse Id : " + FspouseId + ""
-				+ "\n Family Child Id : " + FchildId + "\n";
+				+ "\n Family Child Id : " + FchildId;
 	}
 	
 	public boolean isUnder150YearsOld(){

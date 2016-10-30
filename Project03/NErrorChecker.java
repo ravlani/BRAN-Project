@@ -16,8 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
-
 public class NErrorChecker {
 
 	private LinkedHashMap<String, Individual> iMap;
@@ -112,6 +110,45 @@ public class NErrorChecker {
 							System.out.println("Anomaly US23 : Another individual "+indi2.getKey()+" have same name "+i1.getName()+" and birthdate");
 						}
 					}
+				}
+			}
+		}
+	}
+	
+	public void calculateAge(Individual i){
+		Date d = new Date();
+		if(i.getDeathDate() == null){
+			System.out.println(" US27 Age : "+dateDifference(i.getBirthDate(),d)+"\n");
+		}
+		else{
+			System.out.println(" US27 Age at death : " +dateDifference(i.getBirthDate(),i.getDeathDate())+"\n");
+		}
+	}
+	
+	public void spouseAgeDiff(){
+		for(Entry<String, Family> fam : fMap.entrySet()){
+			Family f = fam.getValue();
+			Individual husband = iMap.get(f.getHusband());
+			Individual wife = iMap.get(f.getWife());
+			int husband_age_at_marriage = dateDifference(husband.getBirthDate(),f.getMarriageDate());
+			int wife_age_at_marriage = dateDifference(wife.getBirthDate(), f.getMarriageDate());
+			
+			if(husband_age_at_marriage>wife_age_at_marriage){
+				if(wife_age_at_marriage == 0){
+					if(husband_age_at_marriage > 2)
+					System.out.println("Anomaly US34 : "+husband.getName()+"("+husband.getId()+") was more than twice as old as "+wife.getName()+"("+wife.getId()+") during their marriage");
+				}
+				else if(husband_age_at_marriage/wife_age_at_marriage >2){
+					System.out.println("Anomaly US34 : "+husband.getName()+"("+husband.getId()+") was more than twice as old as "+wife.getName()+"("+wife.getId()+") during their marriage");
+				}
+			}
+			else{
+				if(husband_age_at_marriage == 0){
+					if(wife_age_at_marriage > 2)
+					System.out.println("Anomaly US34 : "+wife.getName()+"("+wife.getId()+") was more than twice as old as "+husband.getName()+"("+husband.getId()+") during their marriage");
+				}
+				else if (wife_age_at_marriage/husband_age_at_marriage >2){
+					System.out.println("Anomaly US34 : "+wife.getName()+"("+wife.getId()+") was more than twice as old as "+husband.getName()+"("+husband.getId()+") during their marriage");
 				}
 			}
 		}
