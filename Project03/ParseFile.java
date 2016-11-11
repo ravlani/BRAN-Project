@@ -54,6 +54,8 @@ public class ParseFile {
 	public static void printData(){
 		for (Entry<String, Individual> i :indiMap.entrySet()){
 			System.out.println(i.getValue().toString());
+			NErrorChecker nErrorCheck = new NErrorChecker(indiMap, famMap);
+			nErrorCheck.calculateAge(i.getValue());
 		}
 		for (Entry<String, Family> f :famMap.entrySet()){
 			Family fam = f.getValue();
@@ -188,6 +190,7 @@ public class ParseFile {
 		nErrorCheck.mar_div_BeforeDeath();
 		nErrorCheck.parentsNotOld();
 		nErrorCheck.uniqueNameBirthDate();
+		nErrorCheck.spouseAgeDiff();
 		RErrorChecker check = new RErrorChecker(indiMap, famMap);
 		check.user_stories();
     }
@@ -200,6 +203,7 @@ public class ParseFile {
     		US22ErrorMsg = US22ErrorMsg.concat(String.format("Error US22: This unique id(%1s) already exist\n", id));
     	}
     }
+
 
 
 }
