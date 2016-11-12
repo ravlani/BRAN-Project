@@ -172,31 +172,36 @@ public class NErrorChecker {
 		for(Entry<String, Individual> indi : iMap.entrySet()){
 			Individual i = indi.getValue();
 			if(i.getDeathDate() != null && dateDifference(i.getDeathDate(),new Date(),"D") <= 30){
-				System.out.println("US37 : Recent survivors of "+i.getName()+"("+i.getId()+")");
 				if(fMap.get(i.getFspouseId())!=null){
 					Family f = fMap.get(i.getFspouseId());
-					Individual spouse;
-					if(i.getGender().equals("F")){
-						 spouse = iMap.get(f.getHusband());
-					}
-					else{
-						spouse = iMap.get(f.getWife());
-					}
-					if(spouse.getDeathDate() == null)
-						System.out.println("Spouse - "+spouse.getName()+"("+spouse.getId()+")");
+					Individual spouse= null;
+					String child[] = new String[f.getChild().size()];
+					if(i.getGender().equals("F"))
+							spouse = iMap.get(f.getHusband());
+					else
+							spouse = iMap.get(f.getWife());
+					
 					if(f.getChild().size()>0){
 						for(int index = 0; index < f.getChild().size(); index++){
-							Individual child = iMap.get(f.getChild().get(index));
-							if(child.getDeathDate() == null){
-								System.out.println("Child - "+child.getName()+"("+child.getId()+")");
+							Individual c = iMap.get(f.getChild().get(index));
+							if(c.getDeathDate() == null){
+								child[index] = c.getName();
 							}
 						}
 					}
-					if(spouse.getDeathDate()!=null && f.getChild().size()<1)
-						System.out.println("are none");
+					
+					if(spouse.getDeathDate() == null || child.length > 0 ){
+						System.out.println("US37 : Recent survivors of "+i.getName()+"("+i.getId()+") are");
+						if(spouse.getDeathDate() == null){
+							System.out.println("Spouse - "+spouse.getName());
+						}
+						if(child.length > 0){
+							for (int in = 0; in < child.length; in++){
+								System.out.println("Child - "+child[in]);
+							}
+						}
+					}
 				}
-				else
-					System.out.println("are none");
 			}
 		}
 	}
@@ -223,11 +228,11 @@ public class NErrorChecker {
 				
 				if(month == bmonth){
 					if(day < bday)
-						System.out.println("US38 : "+i.getName()+"("+i.getId()+")"+"has upcoming birthday!");
+						System.out.println("US38 : "+i.getName()+"("+i.getId()+")"+" has upcoming birthday!");
 				}
 				else if(d1month == bmonth){
 					if(d1day >= bday){
-						System.out.println("US38 : "+i.getName()+"("+i.getId()+")"+"has upcoming birthday!");
+						System.out.println("US38 : "+i.getName()+"("+i.getId()+")"+" has upcoming birthday!");
 					}
 				}
 			}
