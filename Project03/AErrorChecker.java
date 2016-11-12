@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 class AErrorChecker {
 	private LinkedHashMap<String, Individual> indiMap;
@@ -29,6 +30,18 @@ class AErrorChecker {
 			if(set.getValue().getDeathDate() != null){
 				if(!us03(set.getValue().getDeathDate(), set.getValue().getBirthDate())){
 					System.out.println("Error: US03 : "+set.getValue().getName()+"("+set.getValue().getId()+")'s Death Date "+formatDate(set.getValue().getDeathDate())+" is before Birth Date "+formatDate(set.getValue().getBirthDate())+"." );
+				}
+			}
+			
+			//For User Story 35
+			
+			if(us35(set.getValue().getBirthDate())){
+				System.out.println("US35: "+set.getValue().getName()+"("+set.getValue().getId()+") was born recently.");
+			}
+			
+			if(set.getValue().getDeathDate() != null){
+				if(us36(set.getValue().getDeathDate())){
+					System.out.println("US36: "+set.getValue().getName()+"("+set.getValue().getId()+") died recently.");
 				}
 			}
 			
@@ -164,6 +177,26 @@ class AErrorChecker {
 		cal.setTime(date);
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 		return format1.format(cal.getTime());
+	}
+	
+	public boolean us35(Date bdate){
+		Date currentDate = new Date();
+		long diffInMilli = currentDate.getTime() - bdate.getTime();
+		long daysDiff = TimeUnit.DAYS.convert(diffInMilli, TimeUnit.MILLISECONDS);
+		if(daysDiff >=0 && daysDiff <= 30){
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean us36(Date ddate){
+		Date currentDate = new Date();
+		long diffInMilli = currentDate.getTime() - ddate.getTime();
+		long daysDiff = TimeUnit.DAYS.convert(diffInMilli, TimeUnit.MILLISECONDS);
+		if(daysDiff >=0 && daysDiff <= 30){
+			return true;
+		}
+		return false;
 	}
 	
 	//Utils
