@@ -10,14 +10,20 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class NErrorChecker {
 
+	private static final String DateTimeFormat = null;
 	private LinkedHashMap<String, Individual> iMap;
 	private LinkedHashMap<String, Family> fMap;
 
@@ -77,7 +83,7 @@ public class NErrorChecker {
 					System.out.println("Anomaly US12 : Father "+husband.getName()+" is more than 80 years old than "
 							+ "child "+child.getName());
 				}
-				if(dateDifference(wife.getBirthDate(),child.getBirthDate())>60){
+				if(dateDifference(wife.getBirthDate(),child.getBirthDate(),"Y")>60){
 					System.out.println("Anomaly US12 : Mother "+wife.getName()+" is more than 60 years old than "
 							+ "child "+child.getName());				
 					}
@@ -85,11 +91,19 @@ public class NErrorChecker {
 		}
 	}
 	
-	public int dateDifference(Date d, Date d1){
+	public long dateDifference(Date d, Date d1, String DMY){
 		LocalDate ld = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		LocalDate ld1 = d1.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		Period p = Period.between(ld, ld1);
-		return p.getYears();
+		Period p = Period.between(ld,ld1);
+		if(DMY.equals("D"))
+		    return ChronoUnit.DAYS.between(ld, ld1);
+		else if (DMY.equals("M"))
+			return ChronoUnit.MONTHS.between(ld, ld1);
+		else if(DMY.equals("Y"))
+			return ChronoUnit.YEARS.between(ld, ld1);
+		else if(DMY.equals("JD"))
+			return p.getDays();
+		else return 0;
 	}
 	
 	public void uniqueNameBirthDate(){
@@ -118,10 +132,10 @@ public class NErrorChecker {
 	public void calculateAge(Individual i){
 		Date d = new Date();
 		if(i.getDeathDate() == null){
-			System.out.println(" US27 Age : "+dateDifference(i.getBirthDate(),d)+"\n");
+			System.out.println(" US27 Age : "+dateDifference(i.getBirthDate(),d,"Y")+"\n");
 		}
 		else{
-			System.out.println(" US27 Age at death : " +dateDifference(i.getBirthDate(),i.getDeathDate())+"\n");
+			System.out.println(" US27 Age at death : " +dateDifference(i.getBirthDate(),i.getDeathDate(),"Y")+"\n");
 		}
 	}
 	
@@ -130,8 +144,8 @@ public class NErrorChecker {
 			Family f = fam.getValue();
 			Individual husband = iMap.get(f.getHusband());
 			Individual wife = iMap.get(f.getWife());
-			int husband_age_at_marriage = dateDifference(husband.getBirthDate(),f.getMarriageDate());
-			int wife_age_at_marriage = dateDifference(wife.getBirthDate(), f.getMarriageDate());
+			long husband_age_at_marriage = dateDifference(husband.getBirthDate(),f.getMarriageDate(),"Y");
+			long wife_age_at_marriage = dateDifference(wife.getBirthDate(), f.getMarriageDate(),"Y");
 			
 			if(husband_age_at_marriage>wife_age_at_marriage){
 				if(wife_age_at_marriage == 0){
