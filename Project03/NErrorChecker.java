@@ -79,7 +79,7 @@ public class NErrorChecker {
 			ArrayList<String> children = f.getChild();
 			for(int i = 0; i<children.size();i++){
 				Individual child = iMap.get(children.get(i));
-				if(dateDifference(husband.getBirthDate(),child.getBirthDate())>80){
+				if(dateDifference(husband.getBirthDate(),child.getBirthDate(),"Y")>80){
 					System.out.println("Anomaly US12 : Father "+husband.getName()+" is more than 80 years old than "
 							+ "child "+child.getName());
 				}
@@ -167,4 +167,76 @@ public class NErrorChecker {
 			}
 		}
 	}
+	
+	public void recentSurvivors(){
+		for(Entry<String, Individual> indi : iMap.entrySet()){
+			Individual i = indi.getValue();
+			if(i.getDeathDate() != null && dateDifference(i.getDeathDate(),new Date(),"D") <= 30){
+				if(fMap.get(i.getFspouseId())!=null){
+					Family f = fMap.get(i.getFspouseId());
+					Individual spouse= null;
+					String child[] = new String[f.getChild().size()];
+					if(i.getGender().equals("F"))
+							spouse = iMap.get(f.getHusband());
+					else
+							spouse = iMap.get(f.getWife());
+					
+					if(f.getChild().size()>0){
+						for(int index = 0; index < f.getChild().size(); index++){
+							Individual c = iMap.get(f.getChild().get(index));
+							if(c.getDeathDate() == null){
+								child[index] = c.getName();
+							}
+						}
+					}
+					
+					if(spouse.getDeathDate() == null || child.length > 0 ){
+						System.out.println("US37 : Recent survivors of "+i.getName()+"("+i.getId()+") are");
+						if(spouse.getDeathDate() == null){
+							System.out.println("Spouse - "+spouse.getName());
+						}
+						if(child.length > 0){
+							for (int in = 0; in < child.length; in++){
+								System.out.println("Child - "+child[in]);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void upcomingBirthdays(){
+		for(Entry<String, Individual> indi : iMap.entrySet()){
+			Individual i = indi.getValue();
+			if(i.getDeathDate() == null){
+				Date d = new Date();
+				Calendar cal = Calendar.getInstance();
+			    cal.setTime(d);
+			    int month = cal.get(Calendar.MONTH);
+			    int day = cal.get(Calendar.DAY_OF_MONTH);
+			    
+			    cal.add(Calendar.DATE, 30);
+				Date d1=cal.getTime();
+				cal.setTime(d1);
+			    int d1month = cal.get(Calendar.MONTH);
+			    int d1day = cal.get(Calendar.DAY_OF_MONTH);
+				
+			    cal.setTime(i.getBirthDate());
+				int bmonth = cal.get(Calendar.MONTH);
+				int bday = cal.get(Calendar.DAY_OF_MONTH);
+				
+				if(month == bmonth){
+					if(day < bday)
+						System.out.println("US38 : "+i.getName()+"("+i.getId()+")"+" has upcoming birthday!");
+				}
+				else if(d1month == bmonth){
+					if(d1day >= bday){
+						System.out.println("US38 : "+i.getName()+"("+i.getId()+")"+" has upcoming birthday!");
+					}
+				}
+			}
+		}
+	}	
 }
+
