@@ -191,6 +191,8 @@ public class ParseFile {
 		nErrorCheck.parentsNotOld();
 		nErrorCheck.uniqueNameBirthDate();
 		nErrorCheck.spouseAgeDiff();
+		nErrorCheck.recentSurvivors();
+		nErrorCheck.upcomingBirthdays();
 		RErrorChecker check = new RErrorChecker(indiMap, famMap);
 		check.user_stories();
     }
